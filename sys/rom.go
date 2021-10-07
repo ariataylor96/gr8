@@ -24,9 +24,9 @@ func (c *Chip8) LoadROMData(buf []byte) {
 		c.Memory[ROM_START_ADDRESS+idx] = val
 	}
 
-	c.rom_length = uint16(len(buf))
+	c.romLength = uint16(len(buf))
 }
 
 func (c *Chip8) ROMData() []byte {
-	return c.Memory[ROM_START_ADDRESS : ROM_START_ADDRESS+int(c.rom_length)]
+	return c.Memory[ROM_START_ADDRESS : ROM_START_ADDRESS+int(c.romLength)]
 }
