@@ -1,10 +1,13 @@
-package sys
+package sys_test
 
-import "testing"
+import (
+	"gr8/sys"
+	"testing"
+)
 
 func TestDataLoad(t *testing.T) {
 	data := []byte{1, 2, 3, 4, 5}
-	chip := Chip8{}
+	chip := sys.NewChip8()
 
 	chip.LoadROMData(data)
 

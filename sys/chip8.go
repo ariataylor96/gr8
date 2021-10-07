@@ -1,7 +1,5 @@
 package sys
 
-import "os"
-
 type Chip8 struct {
 	Registers  [16]uint8
 	Memory     [4096]uint8
@@ -18,31 +16,14 @@ type Chip8 struct {
 	rom_length uint16
 }
 
-const START_ADDRESS int = 0x200
+func NewChip8() Chip8 {
+	res := Chip8{}
 
-func (c *Chip8) LoadROMFromFile(filename string) {
-	file, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+	res.LoadFont()
 
-	info, _ := file.Stat()
-	buf := make([]byte, info.Size())
-
-	file.Read(buf)
-
-	c.LoadROMData(buf)
+	return res
 }
 
-func (c *Chip8) LoadROMData(buf []byte) {
-	for idx, val := range buf {
-		c.Memory[START_ADDRESS+idx] = val
-	}
-
-	c.rom_length = uint16(len(buf))
-}
-
-func (c *Chip8) ROMData() []byte {
-	return c.Memory[START_ADDRESS : START_ADDRESS+int(c.rom_length)]
+func (c *Chip8) Next() {
+	c.PC += 2
 }
