@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
-	fmt.Println(259 & 0xFF)
+	fmt.Println((0x13E5 & 0xF000) >> 12)
+	fmt.Println(byte((0x13E5 & 0xF000) >> 12))
 }

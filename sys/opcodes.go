@@ -147,7 +147,7 @@ func (c *Chip8) LDI(addr uint16) {
 
 // Bnnn: JP V0, addr
 // Jump to location stored in V0 + addr
-func (c *Chip8) JV0(addr uint16) {
+func (c *Chip8) JPV0(addr uint16) {
 	c.PC = uint16(c.Registers[0]) + addr
 }
 
