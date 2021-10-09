@@ -26,59 +26,59 @@ func (c *Chip8) CALL(addr uint16) {
 }
 
 // 3xkk: Skip next instruction if register == val
-func (c *Chip8) SE(register, val uint8) {
+func (c *Chip8) SE(register, val byte) {
 	if c.Registers[register] == val {
 		c.Next()
 	}
 }
 
 // 4xkk: Skip next instruction if register != val
-func (c *Chip8) SNE(register, val uint8) {
+func (c *Chip8) SNE(register, val byte) {
 	if c.Registers[register] != val {
 		c.Next()
 	}
 }
 
 // 5xy0: Skip next instruction if Vx == Vy
-func (c *Chip8) RSE(x, y uint8) {
+func (c *Chip8) RSE(x, y byte) {
 	if c.Registers[x] == c.Registers[y] {
 		c.Next()
 	}
 }
 
 // 6xkk: Set Vx = val
-func (c *Chip8) LD(register, val uint8) {
+func (c *Chip8) LD(register, val byte) {
 	c.Registers[register] = val
 }
 
 // 7xkk: Add Vx += val
-func (c *Chip8) ADD(register, val uint8) {
+func (c *Chip8) ADD(register, val byte) {
 	c.Registers[register] += val
 }
 
 // 8xy0: Set Vx = Vy
-func (c *Chip8) LDR(x, y uint8) {
+func (c *Chip8) LDR(x, y byte) {
 	c.Registers[x] = c.Registers[y]
 }
 
 // 8xy1: Set Vx |= Vy
-func (c *Chip8) ORR(x, y uint8) {
+func (c *Chip8) ORR(x, y byte) {
 	c.Registers[x] |= c.Registers[y]
 }
 
 // 8xy2: Set Vx &= Vy
-func (c *Chip8) ANDR(x, y uint8) {
+func (c *Chip8) ANDR(x, y byte) {
 	c.Registers[x] &= c.Registers[y]
 }
 
 // 8xy3: Set Vx XOR Vy
-func (c *Chip8) XORR(x, y uint8) {
+func (c *Chip8) XORR(x, y byte) {
 	c.Registers[x] ^= c.Registers[y]
 }
 
 // 8xy4: Set Vx += Vy, and set VF = carry
 // If the result is > 255 then VF is set to 1 as a flag
-func (c *Chip8) ADDCR(x, y uint8) {
+func (c *Chip8) ADDCR(x, y byte) {
 	Vx, Vy := c.Registers[x], c.Registers[y]
 	sum := Vx + Vy
 
@@ -95,7 +95,7 @@ func (c *Chip8) ADDCR(x, y uint8) {
 
 // 8xy5: Set Vx -= Vy, and set VF = NOT borrow
 // Put plainly, VF = Vx > Vy
-func (c *Chip8) SUBCR(x, y uint8) {
+func (c *Chip8) SUBCR(x, y byte) {
 	Vx, Vy := c.Registers[x], c.Registers[y]
 
 	if Vx > Vy {
@@ -110,28 +110,28 @@ func (c *Chip8) SUBCR(x, y uint8) {
 // 8xy6: SHR Vx
 // Shifts Vx to the right (divides it by two) and
 // saves the least significant bit in VF
-func (c *Chip8) SHR(register uint8) {
+func (c *Chip8) SHR(register byte) {
 	// Save the least significant bit in VF
 	c.Registers[0xF] = c.Registers[register] & 0x1
 	c.Registers[register] >>= 1
 }
 
 // 8xy7: Set Vy -= Vx, and set VF = NOT borrow
-func (c *Chip8) SUBNCR(x, y uint8) {
+func (c *Chip8) SUBNCR(x, y byte) {
 	c.SUBCR(y, x)
 }
 
 // 8xyE: SHL Vx
 // Shifts Vx to the left (multiplies it by two)
 // and saves the most significant bit in VF
-func (c *Chip8) SHL(register uint8) {
+func (c *Chip8) SHL(register byte) {
 	// Save the most significant bit in VF
 	c.Registers[0xF] = c.Registers[register] & 0x80
 	c.Registers[register] <<= 1
 }
 
 // 9xy0: Skip next instruction if Vx != Vy
-func (c *Chip8) SNER(x, y uint8) {
+func (c *Chip8) SNER(x, y byte) {
 	Vx, Vy := c.Registers[x], c.Registers[y]
 
 	if Vx != Vy {
@@ -153,14 +153,14 @@ func (c *Chip8) JPV0(addr uint16) {
 
 // Cxkk - RND Vx, byte
 // Sets Vx = (random byte) & val
-func (c *Chip8) RNDVX(register, val uint8) {
+func (c *Chip8) RNDVX(register, val byte) {
 	c.Registers[register] = c.RandByte() & val
 }
 
 // Dxyn - DRW Vx, Vy, nibble
 // Display n-byte sprite starting at memory location I
 // at coordinates (Vx, Vy), set VF = collision
-func (c *Chip8) DRW(x, y, height uint8) {
+func (c *Chip8) DRW(x, y, height byte) {
 	Vx, Vy := c.Registers[x], c.Registers[y]
 	xPos, yPos := Vx%VIDEO_WIDTH, Vy%VIDEO_HEIGHT
 
@@ -189,7 +189,7 @@ func (c *Chip8) DRW(x, y, height uint8) {
 
 // Ex9E: SKP Vx
 // Skip next instruction if key with value of Vx is pressed
-func (c *Chip8) SKPVX(x uint8) {
+func (c *Chip8) SKPVX(x byte) {
 	Vx := c.Registers[x]
 
 	if c.Keypad[Vx] != 0 {
@@ -199,7 +199,7 @@ func (c *Chip8) SKPVX(x uint8) {
 
 // ExA1: SKNP Vx
 // Skip next instruction if key with value of Vx is not pressed
-func (c *Chip8) SKNPVX(x uint8) {
+func (c *Chip8) SKNPVX(x byte) {
 	Vx := c.Registers[x]
 
 	if c.Keypad[Vx] == 0 {
@@ -209,16 +209,16 @@ func (c *Chip8) SKNPVX(x uint8) {
 
 // Fx07 - LD Vx, DT
 // Set Vx = delay timer value
-func (c *Chip8) LDVXDT(x uint8) {
+func (c *Chip8) LDVXDT(x byte) {
 	c.Registers[x] = c.DelayTimer
 }
 
 // Fx0A - LD Vx, K
 // Wait for a key press, store the value of the key in Vx
-func (c *Chip8) LDVXK(x uint8) {
+func (c *Chip8) LDVXK(x byte) {
 	for i := 0; i < 16; i++ {
 		if c.Keypad[i] != 0 {
-			c.Registers[x] = uint8(i)
+			c.Registers[x] = byte(i)
 			return
 		}
 	}
@@ -228,25 +228,25 @@ func (c *Chip8) LDVXK(x uint8) {
 
 // Fx15 - LD DT, Vx
 // Set delay timer = Vx
-func (c *Chip8) LDDTVX(x uint8) {
+func (c *Chip8) LDDTVX(x byte) {
 	c.DelayTimer = c.Registers[x]
 }
 
 // Fx18 - LD ST, Vx
 // Set sound timer = Vx
-func (c *Chip8) LDSTVX(x uint8) {
+func (c *Chip8) LDSTVX(x byte) {
 	c.SoundTimer = c.Registers[x]
 }
 
 // Fx1E - ADD I, Vx
 // Set I = I + Vx
-func (c *Chip8) ADDIVX(x uint8) {
+func (c *Chip8) ADDIVX(x byte) {
 	c.Index += uint16(c.Registers[x])
 }
 
 // Fx29 - LD F, Vx
 // Set I = location of sprite for digit Vx
-func (c *Chip8) LDFVX(x uint8) {
+func (c *Chip8) LDFVX(x byte) {
 	digit := c.Registers[x]
 
 	c.Index = uint16(font.START_ADDRESS) + uint16(5*digit)
@@ -258,7 +258,7 @@ func (c *Chip8) LDFVX(x uint8) {
 // The interpreter takes the decimal value of Vx, and places the hundreds digit
 // in memory at location in I, the tens digit at location I+1, and the ones digit
 // at location I+2.
-func (c *Chip8) LDBVX(x uint8) {
+func (c *Chip8) LDBVX(x byte) {
 	val := c.Registers[x]
 
 	// Ones-place
@@ -275,7 +275,7 @@ func (c *Chip8) LDBVX(x uint8) {
 
 // Fx55 - LD [I], Vx
 // Store registers V0 through Vx in memory starting at location I
-func (c *Chip8) LDIVX(x uint8) {
+func (c *Chip8) LDIVX(x byte) {
 	for i := 0; i <= int(x); i++ {
 		c.Memory[int(c.Index)+i] = c.Registers[i]
 	}
@@ -283,7 +283,7 @@ func (c *Chip8) LDIVX(x uint8) {
 
 // Fx65 - LD Vx, [I]
 // Read registers V0 through Vx from memory starting at location I
-func (c *Chip8) LDVXI(x uint8) {
+func (c *Chip8) LDVXI(x byte) {
 	for i := 0; i <= int(x); i++ {
 		c.Registers[i] = c.Memory[int(c.Index)+i]
 	}

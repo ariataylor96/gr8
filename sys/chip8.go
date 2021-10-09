@@ -3,8 +3,8 @@ package sys
 import "gr8/interfaces"
 
 const (
-	VIDEO_WIDTH  uint8 = interfaces.VIDEO_WIDTH
-	VIDEO_HEIGHT uint8 = interfaces.VIDEO_HEIGHT
+	VIDEO_WIDTH  byte = interfaces.VIDEO_WIDTH
+	VIDEO_HEIGHT byte = interfaces.VIDEO_HEIGHT
 )
 
 type Chip8 struct {

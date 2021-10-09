@@ -2,8 +2,8 @@ package sys
 
 func XKK(c *Chip8) {
 	var (
-		x  uint8 = byte((c.Opcode & 0x0F00) >> 8)
-		kk uint8 = byte(c.Opcode & 0x00FF)
+		x  byte = byte((c.Opcode & 0x0F00) >> 8)
+		kk byte = byte(c.Opcode & 0x00FF)
 		f  func(byte, byte)
 	)
 
