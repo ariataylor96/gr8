@@ -17,5 +17,5 @@ type Chip8 struct {
 	Keypad     [16]byte
 	Video      [int(VIDEO_WIDTH) * int(VIDEO_HEIGHT)]uint32
 	Opcode     uint16
-	opcode
+	opcodes
 }

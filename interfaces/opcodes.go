@@ -1,6 +1,6 @@
 package interfaces
 
-type opcode interface {
+type opcodes interface {
 	Op() byte
 
 	CLS()
