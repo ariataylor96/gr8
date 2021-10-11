@@ -32,5 +32,7 @@ func X(c *Chip8) {
 		f = c.LDVXI
 	}
 
-	f(x)
+	if f != nil {
+		f(x)
+	}
 }

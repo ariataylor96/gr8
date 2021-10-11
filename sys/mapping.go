@@ -35,6 +35,7 @@ func (c *Chip8) Execute() {
 	for _, bucket := range buckets {
 		if bucket.Matches(code) {
 			bucket.executor(c)
+			return
 		}
 	}
 }

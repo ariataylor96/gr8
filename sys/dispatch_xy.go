@@ -48,5 +48,7 @@ func XY(c *Chip8) {
 		return
 	}
 
-	f(x, y)
+	if f != nil {
+		f(x, y)
+	}
 }

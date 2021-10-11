@@ -20,5 +20,7 @@ func XKK(c *Chip8) {
 		f = c.RNDVX
 	}
 
-	f(x, kk)
+	if f != nil {
+		f(x, kk)
+	}
 }

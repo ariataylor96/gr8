@@ -17,5 +17,7 @@ func NNN(c *Chip8) {
 		f = c.JPV0
 	}
 
-	f(addr)
+	if f != nil {
+		f(addr)
+	}
 }
