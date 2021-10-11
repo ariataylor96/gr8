@@ -27,18 +27,19 @@ func run() {
 	win, err := pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:  "gr8",
 		Bounds: pixel.R(0, 0, float64(DISPLAY_WIDTH), float64(DISPLAY_HEIGHT)),
-		//VSync:  true,
+		VSync:  true,
 	})
 
 	if err != nil {
 		panic(err)
 	}
 
+	win.Clear(color.Black)
+
 	for !win.Closed() {
-		win.Clear(color.Black)
 		texture := util.SpriteFromVideo(&system.Video, int(interfaces.VIDEO_WIDTH), int(interfaces.VIDEO_HEIGHT))
 
-		texture.Draw(win, pixel.IM.Moved(win.Bounds().Center()).ScaledXY(pixel.ZV, pixel.V(16, 16)))
+		texture.Draw(win, pixel.IM.Scaled(pixel.ZV, 16).Moved(win.Bounds().Center()))
 		system.Cycle()
 
 		win.Update()

@@ -1,10 +1,12 @@
 package sys
 
-import "gr8/font"
+import (
+	"gr8/font"
+)
 
 // 00E0: Clear the display
 func (c *Chip8) CLS() {
-	c.Video = [64 * 32]uint32{}
+	c.Video = [64 * 32]byte{}
 }
 
 // 00EE: Return from a subroutine
@@ -162,7 +164,7 @@ func (c *Chip8) RNDVX(register, val byte) {
 // at coordinates (Vx, Vy), set VF = collision
 func (c *Chip8) DRW(x, y, height byte) {
 	Vx, Vy := c.Registers[x], c.Registers[y]
-	xPos, yPos := Vx%VIDEO_WIDTH, Vy%VIDEO_HEIGHT
+	xPos, yPos := Vx, Vy
 
 	c.Registers[0xF] = 0
 
@@ -171,17 +173,21 @@ func (c *Chip8) DRW(x, y, height byte) {
 
 		for col := 0; col < 8; col++ {
 			spritePixel := spriteByte & (0x80 >> col)
-			screenPixel := &(c.Video[(int(yPos)+row)*int(VIDEO_WIDTH)+(int(xPos)+col)])
+			vramIdx := (int(yPos)+row)*int(VIDEO_WIDTH) + (int(xPos) + col)
+			if vramIdx >= 2048 {
+				vramIdx = 2047
+			}
+			screenPixel := &(c.Video[vramIdx])
 
 			// Sprite pixel is on
 			if spritePixel != 0 {
 				// Pixel already on the screen is on, meaning there's a collision
-				if *screenPixel == 0xFFFFFFFF {
+				if *screenPixel == 0xFF {
 					c.Registers[0xF] = 1
 				}
 
 				// XOR with the existence of the sprite pixel instead of the status
-				*screenPixel ^= 0xFFFFFFFF
+				*screenPixel ^= 0xFF
 			}
 		}
 	}

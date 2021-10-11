@@ -17,6 +17,7 @@ func NewChip8() Chip8 {
 	res := Chip8{}
 
 	res.LoadFont()
+	res.PC = 0x200
 
 	return res
 }

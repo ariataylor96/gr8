@@ -5,11 +5,12 @@ import (
 )
 
 var (
-	nnnCodes []byte = []byte{0x1, 0x2, 0xA, 0xB}
-	xkkCodes []byte = []byte{0x3, 0x4, 0x6, 0x7, 0xC}
-	xyCodes  []byte = []byte{0x5, 0x9, 0x8}
-	xynCodes []byte = []byte{0xD}
-	xCodes   []byte = []byte{0xE, 0xF}
+	nnnCodes   []byte = []byte{0x1, 0x2, 0xA, 0xB}
+	xkkCodes   []byte = []byte{0x3, 0x4, 0x6, 0x7, 0xC}
+	xyCodes    []byte = []byte{0x5, 0x9, 0x8}
+	xynCodes   []byte = []byte{0xD}
+	xCodes     []byte = []byte{0xE, 0xF}
+	blankCodes []byte = []byte{0x0}
 )
 
 type m struct {
@@ -22,6 +23,7 @@ func (me *m) Matches(code byte) bool {
 }
 
 var buckets = []m{
+	m{&blankCodes, Blank},
 	m{&nnnCodes, NNN},
 	m{&xkkCodes, XKK},
 	m{&xyCodes, XY},
@@ -35,7 +37,6 @@ func (c *Chip8) Execute() {
 	for _, bucket := range buckets {
 		if bucket.Matches(code) {
 			bucket.executor(c)
-			return
 		}
 	}
 }
