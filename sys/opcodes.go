@@ -174,8 +174,8 @@ func (c *Chip8) DRW(x, y, height byte) {
 		for col := 0; col < 8; col++ {
 			spritePixel := spriteByte & (0x80 >> col)
 			vramIdx := (int(yPos)+row)*int(VIDEO_WIDTH) + (int(xPos) + col)
-			if vramIdx >= 2048 {
-				vramIdx = 2047
+			if vramIdx >= 2048 || vramIdx < 0 {
+				continue
 			}
 			screenPixel := &(c.Video[vramIdx])
 
