@@ -1,7 +1,6 @@
 package main
 
 import (
-	"gr8/interfaces"
 	"gr8/sys"
 	"gr8/util"
 	"image/color"
@@ -18,7 +17,8 @@ const (
 
 func run() {
 	var (
-		system sys.Chip8 = sys.NewChip8()
+		system  sys.Chip8    = sys.NewChip8()
+		texture pixel.Sprite = util.BlankSprite()
 	)
 
 	// Load our ROM file
@@ -37,7 +37,7 @@ func run() {
 	win.Clear(color.Black)
 
 	for !win.Closed() {
-		texture := util.SpriteFromVideo(&system.Video, int(interfaces.VIDEO_WIDTH), int(interfaces.VIDEO_HEIGHT))
+		util.SpriteFromVideo(&system.Video, &texture)
 
 		texture.Draw(win, pixel.IM.Scaled(pixel.ZV, 16).Moved(win.Bounds().Center()))
 		system.Cycle()
