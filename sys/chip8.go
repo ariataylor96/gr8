@@ -15,6 +15,7 @@ type Chip8 struct {
 
 func NewChip8() Chip8 {
 	res := Chip8{}
+	seedRng()
 
 	res.LoadFont()
 	res.PC = 0x200
