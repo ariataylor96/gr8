@@ -27,7 +27,7 @@ func run() {
 	win, err := pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:  "gr8",
 		Bounds: pixel.R(0, 0, float64(DISPLAY_WIDTH), float64(DISPLAY_HEIGHT)),
-		VSync:  true,
+		//VSync:  true,
 	})
 
 	if err != nil {
