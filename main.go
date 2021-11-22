@@ -17,6 +17,10 @@ const (
 	DISPLAY_HEIGHT int = 512
 )
 
+func now() int64 {
+	return time.Now().UnixMilli()
+}
+
 func run() {
 	var (
 		system  sys.Chip8    = sys.NewChip8()
@@ -41,21 +45,28 @@ func run() {
 
 	win.Clear(color.Black)
 
-	var cycleStarted, currentTime int64 = time.Now().UnixMilli(), time.Now().UnixMilli()
+	var cycleStarted, currentTime, lastRender int64 = now(), now(), now()
 
 	for !win.Closed() {
-		cycleStarted = time.Now().UnixMilli()
+		cycleStarted = now()
 		util.SpriteFromVideo(&system.Video, &texture)
 
-		texture.Draw(win, pixel.IM.Scaled(pixel.ZV, 16).Moved(win.Bounds().Center()))
-		system.Cycle()
-
-		win.Update()
-		currentTime = time.Now().UnixMilli()
+		currentTime = now()
 
 		if currentTime-cycleStarted < int64(delay) {
 			time.Sleep(time.Millisecond * time.Duration(int64(delay)-(currentTime-cycleStarted)))
 		}
+
+		system.Cycle()
+
+		if currentTime-lastRender < 13 {
+			continue
+		}
+
+		texture.Draw(win, pixel.IM.Scaled(pixel.ZV, 16).Moved(win.Bounds().Center()))
+
+		win.Update()
+		lastRender = now()
 	}
 }
 
